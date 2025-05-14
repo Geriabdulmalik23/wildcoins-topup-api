@@ -29,16 +29,26 @@ class ProductController extends Controller
 
     public function home()
     {
-        $data =[
+        $data = [
             'balance' => [
-                    'clover' => 0,
-                    'energy' => 0
-                ],
-                'banner' => 'http://google.com',
-            'game' => Product::where('product_category_id', 1)->limit(4)->get(),
-            'e_wallet' => Product::where('product_category_id', 2)->limit(4)->get(),
-            'mobile_credit' => Product::where('product_category_id', 3)->limit(4)->get()
+                'clover' => 0,
+                'energy' => 0
+            ],
+            'banner' => 'http://google.com',
+            'game' => Product::where('product_category_id', 1)->limit(4)->get()->map(function ($item) {
+                $item->image_url = url('storage/' . $item->image_url);
+                return $item;
+            }),
+            'e_wallet' => Product::where('product_category_id', 2)->limit(4)->get()->map(function ($item) {
+                $item->image_url = url('storage/' . $item->image_url);
+                return $item;
+            }),
+            'mobile_credit' => Product::where('product_category_id', 3)->limit(4)->get()->map(function ($item) {
+                $item->image_url = url('assets/' . $item->image_url);
+                return $item;
+            }),
         ];
+
 
         return R::success($data,'Berhasil menampilkan data Product');
     }
@@ -59,5 +69,5 @@ class ProductController extends Controller
 
     }
 
-    
+
 }
